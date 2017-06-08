@@ -98,7 +98,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 
 }
 
-void ParticleFilter::dataAssociation(std::vector<LandmarkObs>& predicted, std::vector<LandmarkObs>& observations) {
+void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& observations) {
 	// Find the predicted measurement that is closest to each observed measurement and assign the
 	//   observed measurement to this particular landmark.
 	// NOTE: this method will NOT be called by the grading code. But you will probably find it useful to 
@@ -175,7 +175,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 			}
 		}
 
-		SetAssociations(p, ids, sense_x, sense_y);
+		p = SetAssociations(p, ids, sense_x, sense_y);
 
 		//adjust weight via multivariate gaussian distribution
 		// - the noise variances are assumed to be independent, therefore the covariance would have only diagonal non-zero
@@ -230,7 +230,7 @@ void ParticleFilter::resample() {
 
 }
 
-void ParticleFilter::SetAssociations(Particle& particle, std::vector<int> associations, std::vector<double> sense_x, std::vector<double> sense_y)
+Particle ParticleFilter::SetAssociations(Particle particle, std::vector<int> associations, std::vector<double> sense_x, std::vector<double> sense_y)
 {
 	//particle: the particle to assign each listed association, and association's (x,y) world coordinates mapping to
 	// associations: The landmark id that goes along with each listed association
@@ -245,6 +245,8 @@ void ParticleFilter::SetAssociations(Particle& particle, std::vector<int> associ
 	particle.associations= associations;
  	particle.sense_x = sense_x;
  	particle.sense_y = sense_y;
+
+	return particle;
 
 }
 
